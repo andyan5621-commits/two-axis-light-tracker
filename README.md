@@ -102,6 +102,32 @@ A positive `x_error` means the right side receives more light than the left side
 
 ## FSM States
 
+## FSM Diagram
+
+```mermaid
+stateDiagram-v2
+    [*] --> Off
+
+    Off --> Initialize: switch ON
+    Initialize --> Search: servos centered / PID reset
+
+    Search --> Track: light gradient detected
+    Search --> Sleep: no gradient after timeout
+
+    Sleep --> Search: light gradient detected
+
+    Track --> Hold: error inside deadband
+    Track --> Search: no significant light
+
+    Hold --> Track: error outside deadband
+    Hold --> Search: no significant light
+
+    Track --> Off: switch OFF
+    Hold --> Off: switch OFF
+    Search --> Off: switch OFF
+    Sleep --> Off: switch OFF
+```
+
 | State | Purpose |
 |---|---|
 | Off | System disabled |
